@@ -3,9 +3,10 @@ const app = express();
 const http = require("http");
 const fs = require("fs");
 const data = require("./blogs.json");
+const data2 = require('./blog.json')
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
-// const { uuid } = require('uuidv4');
+
 
 app.delete('/blogs/:title', (req, res) => {
   const blogToDelete = data.find(blog => blog.title == req.params.title);
@@ -15,22 +16,20 @@ app.delete('/blogs/:title', (req, res) => {
   res.end('ok');
 });
 
-app.post('/blogs', (req, res) => {
+app.post('/blog', (req, res) => {
   if (isValid(req)) {
     res.status(400);
     res.send("invalid");
     return;
   }
-  // const id = uuid();
-  let newBlog = {
-    // id:id,
-    title: req.body.title,
-    content: req.body.content
+  const title= req.body.title
+  const content= req.body.content
+  if (fs.existsSync("./blog.json")) {
+    fs.writeFileSync(title, content);
+    res.status(201)
+    res.end("ok")
   }
-  data.push(newBlog);
-  res.status(201);
-  fs.writeFileSync("./blogs.json", JSON.stringify(newBlog))
-  res.end('ok')
+
 });
 
 app.put('/blogs', (req, res) => {
