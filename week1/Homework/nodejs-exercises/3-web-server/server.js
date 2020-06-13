@@ -4,10 +4,13 @@ var fs = require("fs");
 //create a server
 let server = http.createServer(function (req, res) {
   if (req.url === "/") {
-    fs.readFile("./index.js", null, function (error, data) {
+    fs.readFile("./index.html", null, function (error, data) {
       if (!error) {
         res.writeHead(200, { "Content-Type": "text/html" });
         res.end(data);
+      }else{
+        res.writeHead(404, { 'Content-Type': 'text/html' });
+        res.end(error)
       }
     });
   }
