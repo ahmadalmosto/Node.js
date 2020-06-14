@@ -3,11 +3,17 @@ const app = express();
 const http = require("http");
 const fs = require("fs");
 const data = require("./blogs.json");
-const data2 = require('./blog.json')
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
+app.use(express.urlencoded({extended: false}))
 
+app.get('/',(req,res)=>{
+  res.set('Content-Type', 'text/plain')
+  res.status(200)
 
+  res.end('Blog post website')
+
+})
 app.delete('/blogs/:title', (req, res) => {
   const blogToDelete = data.find(blog => blog.title == req.params.title);
   const deleteBlog = data.filter(blog => blog.title == blogToDelete)
@@ -16,20 +22,21 @@ app.delete('/blogs/:title', (req, res) => {
   res.end('ok');
 });
 
-app.post('/blog', (req, res) => {
+app.post('/blogs', (req, res) => {
   if (isValid(req)) {
     res.status(400);
     res.send("invalid");
     return;
   }
-  const title= req.body.title
-  const content= req.body.content
-  if (fs.existsSync("./blog.json")) {
-    fs.writeFileSync(title, content);
+  const newBlog ={
+     title:req.body.title,
+     content:req.body.content
+  }
+  const {title, content} = req.body
+  data.push(newBlog)
+    fs.writeFileSync("./blogs.json",JSON.stringify(data));
     res.status(201)
     res.end("ok")
-  }
-
 });
 
 app.put('/blogs', (req, res) => {
