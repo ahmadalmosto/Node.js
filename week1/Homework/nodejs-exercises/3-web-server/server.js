@@ -5,13 +5,12 @@ var fs = require("fs");
 let server = http.createServer(function (req, res) {
   if (req.url === "/") {
     fs.readFile("./index.html", null, function (error, data) {
-      if (!error) {
-        res.writeHead(200, { "Content-Type": "text/html" });
-        res.end(data);
-      }else{
+      if (error) {
         res.writeHead(404, { 'Content-Type': 'text/html' });
         res.end(error)
       }
+      res.writeHead(200, { "Content-Type": "text/html" });
+        res.end(data);
     });
   }
   if (req.url === "/script.js") {
