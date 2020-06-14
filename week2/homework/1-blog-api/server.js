@@ -5,7 +5,7 @@ const fs = require("fs");
 const data = require("./blogs.json");
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
-// const { uuid } = require('uuidv4');
+app.use(express.urlencoded({extended: false}))
 
 app.delete('/blogs/:title', (req, res) => {
   const blogToDelete = data.find(blog => blog.title == req.params.title);
@@ -21,15 +21,16 @@ app.post('/blogs', (req, res) => {
     res.send("invalid");
     return;
   }
-  // const id = uuid();
+  
   let newBlog = {
-    // id:id,
+ 
     title: req.body.title,
     content: req.body.content
   }
+  const {title, content} = req.body
   data.push(newBlog);
-  res.status(201);
   fs.writeFileSync("./blogs.json", JSON.stringify(newBlog))
+  res.status(201);
   res.end('ok')
 });
 
