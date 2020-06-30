@@ -41,11 +41,6 @@ app.get('/', (req, res) => {
   res.render('index')
 });
 
-
-app.get("/", (req, res) => {
-  res.send("hello from backend to frontend!");
-});
-
 app.listen(PORT, () => {
   console.log(`we are listening on port ${PORT}`)
 });
