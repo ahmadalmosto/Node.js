@@ -7,11 +7,11 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({
-  extended: true;
+  extended: true
 })); 
 
 app.engine("handlebars", exphbs({
-  defaultLayout: false;
+  defaultLayout: false
 }));
 
 app.set("view engine", 'handlebars');
