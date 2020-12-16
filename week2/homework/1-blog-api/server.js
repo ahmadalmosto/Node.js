@@ -1,18 +1,28 @@
 const express = require("express");
+
 const app = express();
 const http = require("http");
+
 const fs = require("fs");
+
 const data = require("./blogs.json");
+
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
-// const { uuid } = require('uuidv4');
+
 
 app.delete('/blogs/:title', (req, res) => {
   const blogToDelete = data.find(blog => blog.title == req.params.title);
-  const deleteBlog = data.filter(blog => blog.title == blogToDelete)
-  data.splice(deleteBlog, 1);
-  fs.writeFileSync("./blogs.json", JSON.stringify(data))
-  res.end('ok');
+  if(blogToDelete){
+    const deleteBlog = data.filter(blog => blog.title == blogToDelete)
+    data.splice(deleteBlog, 1);
+    fs.writeFileSync("./blogs.json", JSON.stringify(data))
+    res.end('ok');
+  }else{
+    res.send('Not Found');
+    res.status(404)
+  }
+  
 });
 
 app.post('/blogs', (req, res) => {
@@ -21,9 +31,7 @@ app.post('/blogs', (req, res) => {
     res.send("invalid");
     return;
   }
-  // const id = uuid();
   let newBlog = {
-    // id:id,
     title: req.body.title,
     content: req.body.content
   }
@@ -60,6 +68,11 @@ app.get('/blogs/:title', (req, res) => {
     res.end("does not exist")
   }
 });
+app.get('/blogs', (req,res)=>{
+  res.setHeader("Content-Type", "application/jason");
+  res.sendFile(__dirname + "/blogs.json");
+  res.status(200);
+})
 
 function isValid(req) {
   if (req.body == undefined ||
