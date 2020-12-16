@@ -1,12 +1,19 @@
 const express = require("express");
 
 const app = express();
+
 const exphbs = require("express-handlebars");
+
 const axios = require("axios");
+
 const path = require("path");
-const PORT = process.env.PORT || 3000;
+
 const API_KEY = require("./sources/keys.json").API_KEY;
+
+const PORT = process.env.PORT || 3000;
+
 app.use(express.json());
+
 app.use(
   express.urlencoded({
     extended: true,
