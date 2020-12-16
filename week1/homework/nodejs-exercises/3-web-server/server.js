@@ -8,24 +8,34 @@ let server = http.createServer(function (req, res) {
       if (!error) {
         res.writeHead(200, { "Content-Type": "text/html" });
         res.end(data);
+      }else{
+        res.send('Not Found');
+        res.status(404)
       }
     });
-  }
-  if (req.url === "/script.js") {
+  } else if (req.url === "/script.js") {
     fs.readFile("./script.js", null, function (error, data) {
       if (!error) {
         res.writeHead(200, { "Content-Type": "text/javascript" });
         res.end(data);
+      }else{
+        res.send('Not Found');
+        res.status(404)
       }
     });
-  }
-  if (req.url === "/style.css") {
+  } else if (req.url === "/style.css") {
     fs.readFile("/style.css", null, function (error, data) {
       if (!error) {
         res.writeHead(200, { "Content-Type": "text/css" });
         res.end(data);
+      }else{
+        res.send('Not Found');
+        res.status(404)
       }
     });
+  } else {
+    res.send('Not Found');
+    res.status(404);
   }
 });
 server.listen(3000); // The server listens on port 3000
